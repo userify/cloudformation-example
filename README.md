@@ -1,6 +1,6 @@
-# cloudformation-example
+# Userify Cloudformation Example Templates
 
-Example EC2/CloudFormation template(s) explaining how to deploy Userify SSH key management to your EC2 instances.
+Example EC2/CloudFormation template(s) with examples demonstrating how you might deploy Userify SSH key management to your EC2 instances.
 
 *   **[userify-ec2-instance.yaml](userify-ec2-instance.yaml)**
     This simple CloudFormation template will deploy a single instance running Amazon
