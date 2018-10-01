@@ -5,9 +5,7 @@ Description: This simple CloudFormation template will deploy a single instance r
   load additional instance types and regions (using CloudFormation maps), point it at a local/
   self-hosted Userify instance or cluster, or add additional software to the instances and use
   this as the starting point for an AutoScaling Group Launch Configuration.
-  To try this out, paste: https://github.com/userifydevteam/cloudformation-example/raw/master/userify-ec2-instance.yaml
-  into your CloudFormation template launch page.
-
+  
 Outputs:
   InstanceId:
     Description: InstanceId of the newly created EC2 instance
