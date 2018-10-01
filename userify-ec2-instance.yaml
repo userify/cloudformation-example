@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation template to deploy a single instance with Userify'
+
+Outputs:
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value: {Ref: EC2Instance}
+  PublicIP:
+    Description: Public IP address
+    Value:
+      Fn::GetAtt: [EC2Instance, PublicIp]
+
+Parameters:
+  UserifyApiId:
+    Description: >-
+      Userify API ID for this server group. Create an account (remember to paste your
+      SSH public key) at the Userify Dashboard (free) https://dashboard.userify.com,
+      and paste the API ID for any server group that you have granted yourself
+      root access to. Free technical or architectural assistance; email support at userify.
+    Type: String
+  UserifyApiKey: 
+    Description: >-
+      Userify API Key for this server group. Sign into the Userify Dashboard
+      (free), and paste the API KEY for any server group.
+    Type: String
+
+Resources:
+  
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0ff8a91507f77f867
+      InstanceType: t2.nano
+      SecurityGroups:
+      - {Ref: EC2InstanceSecurityGroup}
+      UserData: 
+        Fn::Base64:
+          !Sub
+            |
+              #cloud-config
+              cloud_final_modules:
+               - runcmd
+               - scripts-user
+              runcmd: 
+               - curl -1 -sS "https://static.userify.com/installer.sh" |
+                 static_host="static.userify.com"
+                 shim_host="configure.userify.com"
+                 self_signed=0
+                 api_id="${UserifyApiId}"
+                 api_key="${UserifyApiKey}" sudo -s -E
+  
+  EC2InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+      - CidrIp: '0.0.0.0/0'
+        FromPort: '22'
+        IpProtocol: tcp
+        ToPort: '22'
